@@ -18,7 +18,7 @@ inicio
                     caso 3
                          fimalgoritmo
                     outrocaso
-                         escreva("opÁ„o invalida")
+                         escreva("op√ß√£o invalida")
             fimescolha
       ate falso
 fimprocedimento
@@ -34,7 +34,7 @@ inicio
       escreva ("Nome do jogador 2:")
       leia(nome2)
       escreval(nome," X ",nome2)
-      escreval("Qual sÌmbolo ser· utilizado pelo: ",nome,"?")
+      escreval("Qual s√≠mbolo ser√° utilizado pelo: ",nome,"?")
       escreval ("[X] ou [O]")
       leia(simbolo)
       se (simbolo = "X") ou (simbolo = "x") entao
@@ -72,7 +72,7 @@ inicio
          escreva("Nome do jogador:")
          leia(nome)
          escreval(nome," X Maquina")
-         escreval("Qual sÌmbolo ser· utilizado pelo: ",nome,"?")
+         escreval("Qual s√≠mbolo ser√° utilizado pelo: ",nome,"?")
          escreval ("[X] ou [O]")
          leia(simbolo)
          se (simbolo = "X") ou (simbolo = "x") entao
@@ -100,7 +100,7 @@ inicio
          fimenquanto
 fimprocedimento
 
-// verificaÁ„o //
+// verifica√ß√£o //
 procedimento verificar()
 var ok: logico
 inicio
@@ -164,7 +164,7 @@ var n: caracter
 inicio
       valido <- falso
       repita
-         Escreval("Digite em qual posiÁ„o jogar")
+         Escreval("Digite em qual posi√ß√£o jogar")
          leia(n)
             para l de 1 ate 3 faca
                  para c de 1 ate 3 faca
@@ -174,7 +174,7 @@ inicio
                       fimse
                  fimpara
             fimpara
-         se n„o valido entao
+         se n√£o valido entao
             escreval("jogada invalida")
          fimse
       ate valido
@@ -186,7 +186,7 @@ var n: caracter
 inicio
    valido <- falso
       repita
-         Escreval("Digite em que posiÁ„o escolhe jogar jogo")
+         Escreval("Digite em que posi√ß√£o escolhe jogar jogo")
          leia(n)
             para l de 1 ate 3 faca
                  para c de 1 ate 3 faca
@@ -196,7 +196,7 @@ inicio
                       fimse
                  fimpara
             fimpara
-         se n„o valido entao
+         se n√£o valido entao
             escreval("jogada invalida")
          fimse
       ate valido
