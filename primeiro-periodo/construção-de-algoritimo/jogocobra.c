@@ -108,22 +108,22 @@ int main()
     }while(sim);
     colocaCobra(coluna, linha);
 
-    int n = rand() % 5;
+    int n = rand() % 4;
 
     switch(n){
-    case 1:
+    case 0:
         linha += 1;
         troca(coluna, linha);
         break;
-    case 2:
+    case 1:
         linha -= 1;
         troca(coluna, linha);
         break;
-    case 3:
+    case 2:
         coluna += 1;
         troca(coluna, linha );
         break;
-    case 4:
+    case 3:
         coluna -= 1;
         troca(coluna, linha );
         break;
