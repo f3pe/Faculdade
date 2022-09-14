@@ -4,7 +4,16 @@
 
 
 char tabuleiro[TAM][TAM];
+int cobraPos[2][5];
 
+int troca(int cl, int ln){
+
+    tabuleiro[ln][cl] = tabuleiro[cobraPos[0][0]][cobraPos[1][0]];
+    for(int i = 0; i < 4; i++){
+        tabuleiro[cobraPos[0][i]][cobraPos[1][i]] = tabuleiro[cobraPos[0][i+1]][cobraPos[1][i+1]];
+    }
+    tabuleiro[cobraPos[0][4]][cobraPos[1][4]] = ' ';
+}
 void exibir(){
     system("cls");
     //exibe a matriz na tela
@@ -16,9 +25,11 @@ void exibir(){
         printf("\n");
     }
 }
-void moviCobra(int c, int l){
+void colocaCobra(int c, int l){
     // coloca a cobra
     tabuleiro[l][c] = 'c';
+    cobraPos[0][0] = l;
+    cobraPos[1][0] = c;
     for (int i = 0; i < 4; i++){
         if((tabuleiro[l-1][c] == ' ') && (l - 1 > -1) && (l - 1 < 10)){
             l -= 1;
@@ -31,9 +42,13 @@ void moviCobra(int c, int l){
         }
         if (i == 3){
             tabuleiro[l][c] = '.';
+            cobraPos[0][4] = l;
+            cobraPos[1][4] = c;
             continue;
         }
         tabuleiro[l][c] = '*';
+        cobraPos[0][i+1] = l;
+        cobraPos[1][i+1] = c;
     }
 
     exibir();
@@ -42,9 +57,7 @@ void moviCobra(int c, int l){
 
 int main()
 {
-
     int obs;
-
     //monta o tabuleiro
     for(int i = 0; i < TAM; i++){
         for(int j = 0; j < TAM; j++){
@@ -93,7 +106,29 @@ int main()
             }
         }
     }while(sim);
-    moviCobra(coluna, linha);
+    colocaCobra(coluna, linha);
+
+    int n = rand() % 5;
+
+    switch(n){
+    case 1:
+        linha += 1;
+        troca(coluna, linha);
+        break;
+    case 2:
+        linha -= 1;
+        troca(coluna, linha);
+        break;
+    case 3:
+        coluna += 1;
+        troca(coluna, linha );
+        break;
+    case 4:
+        coluna -= 1;
+        troca(coluna, linha );
+        break;
+    }
+    exibir();
 
 
 
