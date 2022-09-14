@@ -122,12 +122,12 @@ int main()
     printf("Digite a quantidade de movimentos da cobra: ");
     scanf("%d", &cont);
 
-
-    while(cont > 0){
+    int end = 1;
+    while((cont > 0) && (end == 1)){
         int n = rand() % 4;
         switch(n){
         case 1:
-            if ((tabuleiro[linha+1][coluna] == ' ') && (linha + 1 < 10)){
+            if ((tabuleiro[linha+1][coluna] != '*') && (linha + 1 < 10)){
                 linha += 1;
                 troca(coluna, linha);
             }else{
@@ -136,7 +136,7 @@ int main()
 
             break;
         case 2:
-            if((tabuleiro[linha-1][coluna] == ' ') && (linha - 1 > -1)){
+            if((tabuleiro[linha-1][coluna] != '*') && (linha - 1 > -1)){
                 linha -= 1;
                 troca(coluna, linha);
                 break;
@@ -145,7 +145,7 @@ int main()
             }
             break;
         case 3:
-            if((tabuleiro[linha][coluna+1] == ' ') && (coluna + 1 < 10)){
+            if((tabuleiro[linha][coluna+1] != '*') && (coluna + 1 < 10)){
                 coluna += 1;
                 troca(coluna, linha );
             }else{
@@ -153,7 +153,7 @@ int main()
             }
             break;
         default:
-            if((tabuleiro[linha][coluna-1] == ' ') && (coluna - 1 > -1)){
+            if((tabuleiro[linha][coluna-1] != '*') && (coluna - 1 > -1)){
                 coluna -= 1;
                 troca(coluna, linha );
             }else{
@@ -162,10 +162,24 @@ int main()
             break;
         }
         exibir();
+      for(int i = 0; i<obs; i++){
+        if ((block[0][i] == linha) && (block[1][i] == coluna)){
+          end = 0;
+          printf("\nVoce bateu em um obstaculo\n\n");
+        }
+      }
         cont--;
     }
+  if (end == 0){
+    printf("parabens vc ganhou!!!");
+  }
 
+  char continuar;
+  printf("Contirunar?: ");
+  scanf(" %c", &continuar);
+  if(continuar == 's'){
+    main();
+  }
 
-
-    return 0;
+  return 0;
 }
