@@ -7,12 +7,22 @@ char tabuleiro[TAM][TAM];
 int cobraPos[2][5];
 
 int troca(int cl, int ln){
-
     tabuleiro[ln][cl] = tabuleiro[cobraPos[0][0]][cobraPos[1][0]];
     for(int i = 0; i < 4; i++){
         tabuleiro[cobraPos[0][i]][cobraPos[1][i]] = tabuleiro[cobraPos[0][i+1]][cobraPos[1][i+1]];
     }
     tabuleiro[cobraPos[0][4]][cobraPos[1][4]] = ' ';
+
+    cobraPos[0][4] = cobraPos[0][3];
+    cobraPos[1][4] = cobraPos[1][3];
+    cobraPos[0][3] = cobraPos[0][2];
+    cobraPos[1][3] = cobraPos[1][2];
+    cobraPos[0][2] = cobraPos[0][1];
+    cobraPos[1][2] = cobraPos[1][1];
+    cobraPos[0][1] = cobraPos[0][0];
+    cobraPos[1][1] = cobraPos[1][0];
+    cobraPos[0][0] = ln;
+    cobraPos[1][0] = cl;
 }
 void exibir(){
     system("cls");
@@ -24,6 +34,7 @@ void exibir(){
         }
         printf("\n");
     }
+    system("pause");
 }
 void colocaCobra(int c, int l){
     // coloca a cobra
@@ -52,7 +63,6 @@ void colocaCobra(int c, int l){
     }
 
     exibir();
-    system("pause");
 }
 
 int main()
@@ -108,28 +118,52 @@ int main()
     }while(sim);
     colocaCobra(coluna, linha);
 
-    int n = rand() % 4;
+    int cont;
+    printf("Digite a quantidade de movimentos da cobra: ");
+    scanf("%d", &cont);
 
-    switch(n){
-    case 1:
-        linha += 1;
-        troca(coluna, linha);
-        break;
-    case 2:
-        linha -= 1;
-        troca(coluna, linha);
-        break;
-    case 3:
-        coluna += 1;
-        troca(coluna, linha );
-        break;
-    default:
-        coluna -= 1;
-        troca(coluna, linha );
-        break;
+
+    while(cont > 0){
+        int n = rand() % 4;
+        switch(n){
+        case 1:
+            if ((tabuleiro[linha+1][coluna] == ' ') && (linha + 1 < 10)){
+                linha += 1;
+                troca(coluna, linha);
+            }else{
+                continue;
+            }
+
+            break;
+        case 2:
+            if((tabuleiro[linha-1][coluna] == ' ') && (linha - 1 > -1)){
+                linha -= 1;
+                troca(coluna, linha);
+                break;
+            }else{
+                continue;
+            }
+            break;
+        case 3:
+            if((tabuleiro[linha][coluna+1] == ' ') && (coluna + 1 < 10)){
+                coluna += 1;
+                troca(coluna, linha );
+            }else{
+                continue;
+            }
+            break;
+        default:
+            if((tabuleiro[linha][coluna-1] == ' ') && (coluna - 1 > -1)){
+                coluna -= 1;
+                troca(coluna, linha );
+            }else{
+                continue;
+            }
+            break;
+        }
+        exibir();
+        cont--;
     }
-    exibir();
-
 
 
 
