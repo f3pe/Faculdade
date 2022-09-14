@@ -111,19 +111,19 @@ int main()
     int n = rand() % 4;
 
     switch(n){
-    case 0:
+    case 1:
         linha += 1;
         troca(coluna, linha);
         break;
-    case 1:
+    case 2:
         linha -= 1;
         troca(coluna, linha);
         break;
-    case 2:
+    case 3:
         coluna += 1;
         troca(coluna, linha );
         break;
-    case 3:
+    default:
         coluna -= 1;
         troca(coluna, linha );
         break;
