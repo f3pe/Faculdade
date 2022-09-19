@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <locale.h>
 #define TAM 10
 
 
@@ -25,7 +26,7 @@ int troca(int cl, int ln){
             }
         }else{
             cobraPos[0][i] = ln;
-            cobraPos[1][i] = cl;
+            cobraPos[1][i] = cl; 
         }
     }
 }
@@ -58,9 +59,9 @@ void colocaCobra(int c, int l){
             l -= 1;
         }else if((isspace(tabuleiro[l][c-1])) && (c - 1 > -1)){
             c -= 1;
-        }else if((isspace(tabuleiro[l+1][c])) && (l + 1 < 10)){
+        }else if((isspace(tabuleiro[l+1][c])) && (l + 1 < TAM)){
             l += 1;
-        }else if((isspace(tabuleiro[l][c+1])) && (c + 1 < 10)){
+        }else if((isspace(tabuleiro[l][c+1])) && (c + 1 < TAM)){
             c += 1;
         }
         if (i == 3){
@@ -78,6 +79,7 @@ void colocaCobra(int c, int l){
 
 int main()
 {
+    setlocale(LC_ALL, "portuguese");
     int obs;
     //monta o tabuleiro
     for(int i = 0; i < TAM; i++){
@@ -87,7 +89,7 @@ int main()
     }
 
     //recebe a quantidade de obstaculos
-    printf("Informe o numero de obstaculos: ");
+    printf("Informe o número de obstaculos: ");
     scanf("%d", &obs);
 
     //coloca os obstaculos
@@ -133,7 +135,7 @@ int main()
         int n = rand() % 4;
         switch(n){
         case 1:
-            if ((tabuleiro[linha+1][coluna] != '*') && (linha + 1 < 10)){
+            if ((tabuleiro[linha+1][coluna] != '*') && (linha + 1 < TAM)){
                 linha += 1;
                 end = verifica(linha, coluna);
                 troca(coluna, linha);
@@ -151,7 +153,7 @@ int main()
             }
             break;
         case 3:
-            if((tabuleiro[linha][coluna+1] != '*') && (coluna + 1 < 10)){
+            if((tabuleiro[linha][coluna+1] != '*') && (coluna + 1 < TAM)){
                 coluna += 1;
                 end = verifica(linha, coluna);
                 troca(coluna, linha );
