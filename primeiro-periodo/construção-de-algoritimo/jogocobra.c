@@ -10,6 +10,116 @@
 char tabuleiro[TAM][TAM];
 int cobraPos[2][5];
 
+void jogar(){
+        int obs;
+        for(int i = 0; i < TAM; i++){
+            for(int j = 0; j < TAM; j++){
+                tabuleiro[i][j] = ' ';
+            }
+        }
+
+        //recebe a quantidade de obstaculos
+        printf("Informe o número de obstaculos: ");
+        scanf("%d", &obs);
+
+        //coloca os obstaculos
+        for(int i = 0; i < obs; i++){
+            int l = rand() % TAM;
+            int c = rand() % TAM;
+            if(tabuleiro[l][c] == ' '){
+                tabuleiro[l][c] = 'x';
+            }
+            else{
+                i--;
+            }
+        }
+
+        exibir();
+
+        //coleta a possição inicial da cobra
+        int sim = 0;
+        int linha, coluna;
+        do{
+            sim = 0;
+            printf("\nEscolha uma possição para a cobra: \n");
+            printf("Linha: ");
+            scanf("%d", &linha);
+            printf("Coluna: ");
+            scanf("%d", &coluna);
+            if(isalpha(tabuleiro[linha][coluna])){
+                sim = 1;
+                printf("Essa possição é invalida pois já existe um obstaculo nela\n\nselecione outra\n\n");
+            }
+        }while(sim);
+
+        colocaCobra(coluna, linha);
+
+        int cont, ref;
+        printf("Digite a quantidade de movimentos da cobra: ");
+        scanf("%d", &cont);
+        ref = cont;
+
+        //decide a direção do movimento da cobra
+        int end = 1;
+        while((cont > 0) && (end == 1)){
+            int n = rand() % 4;
+            switch(n){
+            case 1:
+                if ((tabuleiro[linha+1][coluna] == ' ') && (linha + 1 < TAM)){
+                    linha += 1;
+                    end = verifica(linha, coluna);
+                    troca(coluna, linha);
+                }else{
+                    continue;
+                }
+                break;
+            case 2:
+                if((tabuleiro[linha-1][coluna] == ' ') && (linha - 1 > -1)){
+                    linha -= 1;
+                    end = verifica(linha, coluna);
+                    troca(coluna, linha);
+                }else{
+                    continue;
+                }
+                break;
+            case 3:
+                if((tabuleiro[linha][coluna+1] == ' ') && (coluna + 1 < TAM)){
+                    coluna += 1;
+                    end = verifica(linha, coluna);
+                    troca(coluna, linha );
+                }else{
+                    continue;
+                }
+                break;
+            default:
+                if((tabuleiro[linha][coluna-1] == ' ') && (coluna - 1 > -1)){
+                    coluna -= 1;
+                    end = verifica(linha, coluna);
+                    troca(coluna, linha );
+                }else{
+                    continue;
+                }
+            }
+            exibir();
+            cont--;
+        }
+        if (end == 1){
+            printf("parabens vc ganhou!!!\n");
+        }else{
+            printf("vc bateu em um obstaculo\n");
+            cont++;
+        }
+        printf("Foram visitadas %d casas \nE não foram visitadas %d casas\n\n", ref-cont, (100 - (ref-cont)) - obs);
+
+        // Repete o jogo
+        char continuar;
+        printf("Contirunar?[S/N]: ");
+        scanf(" %c", &continuar);
+        continuar = tolower(continuar);
+        if((continuar == 's')){
+            main();
+        }
+}
 int troca(int cl, int ln){
     //atualiza a cobra no tabuleiro
     tabuleiro[ln][cl] = tabuleiro[cobraPos[0][0]][cobraPos[1][0]];
@@ -26,7 +136,7 @@ int troca(int cl, int ln){
             }
         }else{
             cobraPos[0][i] = ln;
-            cobraPos[1][i] = cl; 
+            cobraPos[1][i] = cl;
         }
     }
 }
@@ -80,114 +190,45 @@ void colocaCobra(int c, int l){
 int main()
 {
     setlocale(LC_ALL, "portuguese");
-    int obs;
+    int opcao;
+    int valor;
     //monta o tabuleiro
-    for(int i = 0; i < TAM; i++){
-        for(int j = 0; j < TAM; j++){
-            tabuleiro[i][j] = ' ';
-        }
-    }
-
-    //recebe a quantidade de obstaculos
-    printf("Informe o número de obstaculos: ");
-    scanf("%d", &obs);
-
-    //coloca os obstaculos
-    for(int i = 0; i < obs; i++){
-        int l = rand() % TAM;
-        int c = rand() % TAM;
-        if(tabuleiro[l][c] == ' '){
-            tabuleiro[l][c] = 'x';
-        }
-        else{
-            i--;
-        }
-    }
-
-    exibir();
-
-    //coleta a possição inicial da cobra
-    int sim = 0;
-    int linha, coluna;
-    do{
-        sim = 0;
-        printf("\nEscolha uma possição para a cobra: \n");
-        printf("Linha: ");
-        scanf("%d", &linha);
-        printf("Coluna: ");
-        scanf("%d", &coluna);
-        if(isalpha(tabuleiro[linha][coluna])){
-            sim = 1;
-            printf("Essa possição é invalida pois já existe um obstaculo nela\n\nselecione outra\n\n");
-        }
-    }while(sim);
-
-    colocaCobra(coluna, linha);
-
-    int cont, ref;
-    printf("Digite a quantidade de movimentos da cobra: ");
-    scanf("%d", &cont);
-    ref = cont;
-
-    //decide a direção do movimento da cobra
-    int end = 1;
-    while((cont > 0) && (end == 1)){
-        int n = rand() % 4;
-        switch(n){
+    system("cls");
+    printf("\n================================================");
+    printf("\n================================================");
+    printf("\n================================================");
+    printf("\n================================================");
+    printf("\n================================================");
+    printf("\n================================================");
+    printf("\n=============.JOGO DA COBRINHA.=================");
+    printf("\n================================================");
+    printf("\n================================================");
+    printf("\n===============[1] JOGAR ......=================");
+    printf("\n===============[2] CRIADORES...=================");
+    printf("\n===============[3] MSG FOFA <3.=================");
+    printf("\n================================================\nResposta: ");
+    scanf("%d",&opcao);
+    switch(opcao)
+    {
         case 1:
-            if ((tabuleiro[linha+1][coluna] != '*') && (linha + 1 < TAM)){
-                linha += 1;
-                end = verifica(linha, coluna);
-                troca(coluna, linha);
-            }else{
-                continue;
-            }
+            jogar();
             break;
         case 2:
-            if((tabuleiro[linha-1][coluna] != '*') && (linha - 1 > -1)){
-                linha -= 1;
-                end = verifica(linha, coluna);
-                troca(coluna, linha);
-            }else{
-                continue;
-            }
+            printf("\nAluno: Felipe Coutinho");
+            printf ("\nAluna: Marianna Ferreira Silva");
+            printf ("\nCONSTRUÇÃO DE ALGORITMO");
             break;
         case 3:
-            if((tabuleiro[linha][coluna+1] != '*') && (coluna + 1 < TAM)){
-                coluna += 1;
-                end = verifica(linha, coluna);
-                troca(coluna, linha );
-            }else{
-                continue;
+            do
+            {
+                printf("\n você consegue, precisamos da sua habilidade!");
+                printf ("\nAPERTE 1 PARA RELER A MSG ou qualque outro para voltar\n");
+                printf ("\n ....<3....\n");
+                printf ("respostas -> ");
+                scanf ("%d", &valor);
             }
-            break;
-        default:
-            if((tabuleiro[linha][coluna-1] != '*') && (coluna - 1 > -1)){
-                coluna -= 1;
-                end = verifica(linha, coluna);
-                troca(coluna, linha );
-            }else{
-                continue;
-            }
-        }
-        exibir();
-        cont--;
-    }
-    if (end == 1){
-        printf("parabens vc ganhou!!!\n");
-    }else{
-        printf("vc bateu em um obstaculo\n");
-        cont++;
-    }
-    printf("Foram visitadas %d casas \nE não foram visitadas %d casas\n\n", ref-cont, (100 - (ref-cont)) - obs);
-
-    // Repete o jogo
-    char continuar;
-    printf("Contirunar?[S/N]: ");
-    scanf(" %c", &continuar);
-    continuar = tolower(continuar);
-    if((continuar == 's')){
-        main();
+            while(valor == 1);
+            main();
     }
     return 0;
 }
