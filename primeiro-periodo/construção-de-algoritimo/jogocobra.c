@@ -1,28 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #define TAM 10
 
 
+//Aluno: Felipe Coutinho
+//Aluno: Marianna Ferreira Silva
 char tabuleiro[TAM][TAM];
 int cobraPos[2][5];
 
 int troca(int cl, int ln){
+    //atualiza a cobra no tabuleiro
     tabuleiro[ln][cl] = tabuleiro[cobraPos[0][0]][cobraPos[1][0]];
     for(int i = 0; i < 4; i++){
         tabuleiro[cobraPos[0][i]][cobraPos[1][i]] = tabuleiro[cobraPos[0][i+1]][cobraPos[1][i+1]];
     }
     tabuleiro[cobraPos[0][4]][cobraPos[1][4]] = ' ';
 
-    cobraPos[0][4] = cobraPos[0][3];
-    cobraPos[1][4] = cobraPos[1][3];
-    cobraPos[0][3] = cobraPos[0][2];
-    cobraPos[1][3] = cobraPos[1][2];
-    cobraPos[0][2] = cobraPos[0][1];
-    cobraPos[1][2] = cobraPos[1][1];
-    cobraPos[0][1] = cobraPos[0][0];
-    cobraPos[1][1] = cobraPos[1][0];
-    cobraPos[0][0] = ln;
-    cobraPos[1][0] = cl;
+    //atualiza o vetor com a posição da cobra
+    for (int i = 4; i >= 0; i--){
+        if(i > 0){
+            for (int j = 0; j < 2; j++){
+                cobraPos[j][i] = cobraPos[j][i-1];
+            }
+        }else{
+            cobraPos[0][i] = ln;
+            cobraPos[1][i] = cl;
+        }
+    }
+}
+//verifica se é uma posição valida
+int verifica(int li, int co){
+    if(isalpha(tabuleiro[li][co])){
+          return 0;
+    }
+    return 1;
 }
 void exibir(){
     system("cls");
@@ -38,17 +50,17 @@ void exibir(){
 }
 void colocaCobra(int c, int l){
     // coloca a cobra
-    tabuleiro[l][c] = 'c';
+    tabuleiro[l][c] = 'C';
     cobraPos[0][0] = l;
     cobraPos[1][0] = c;
     for (int i = 0; i < 4; i++){
-        if((tabuleiro[l-1][c] == ' ') && (l - 1 > -1) && (l - 1 < 10)){
+        if((isspace(tabuleiro[l-1][c])) && (l - 1 > -1)){
             l -= 1;
-        }else if((tabuleiro[l][c-1] == ' ') && (c - 1 > -1) && (c - 1 < 10)){
+        }else if((isspace(tabuleiro[l][c-1])) && (c - 1 > -1)){
             c -= 1;
-        }else if((tabuleiro[l+1][c] == ' ') && (l + 1 > -1) && (l + 1 < 10)){
+        }else if((isspace(tabuleiro[l+1][c])) && (l + 1 < 10)){
             l += 1;
-        }else if((tabuleiro[l][c+1] == ' ') && (c + 1 > -1) && (c + 1 < 10)){
+        }else if((isspace(tabuleiro[l][c+1])) && (c + 1 < 10)){
             c += 1;
         }
         if (i == 3){
@@ -61,7 +73,6 @@ void colocaCobra(int c, int l){
         cobraPos[0][i+1] = l;
         cobraPos[1][i+1] = c;
     }
-
     exibir();
 }
 
@@ -79,17 +90,12 @@ int main()
     printf("Informe o numero de obstaculos: ");
     scanf("%d", &obs);
 
-    //variavel que guarda possição invalida
-    int block[2][obs];
-
     //coloca os obstaculos
     for(int i = 0; i < obs; i++){
         int l = rand() % TAM;
         int c = rand() % TAM;
         if(tabuleiro[l][c] == ' '){
             tabuleiro[l][c] = 'x';
-            block[0][i] = l;
-            block[1][i] = c;
         }
         else{
             i--;
@@ -108,20 +114,20 @@ int main()
         scanf("%d", &linha);
         printf("Coluna: ");
         scanf("%d", &coluna);
-        for(int i = 0; i < obs; i++){
-            if((block[0][i] == linha) && (block[1][i] == coluna)){
-                sim = 1;
-                printf("Essa possição é invalida pois já existe um obstaculo nela\n\nselecione outra\n\n");
-                break;
-            }
+        if(isalpha(tabuleiro[linha][coluna])){
+            sim = 1;
+            printf("Essa possição é invalida pois já existe um obstaculo nela\n\nselecione outra\n\n");
         }
     }while(sim);
+
     colocaCobra(coluna, linha);
 
-    int cont;
+    int cont, ref;
     printf("Digite a quantidade de movimentos da cobra: ");
     scanf("%d", &cont);
+    ref = cont;
 
+    //decide a direção do movimento da cobra
     int end = 1;
     while((cont > 0) && (end == 1)){
         int n = rand() % 4;
@@ -129,17 +135,17 @@ int main()
         case 1:
             if ((tabuleiro[linha+1][coluna] != '*') && (linha + 1 < 10)){
                 linha += 1;
+                end = verifica(linha, coluna);
                 troca(coluna, linha);
             }else{
                 continue;
             }
-
             break;
         case 2:
             if((tabuleiro[linha-1][coluna] != '*') && (linha - 1 > -1)){
                 linha -= 1;
+                end = verifica(linha, coluna);
                 troca(coluna, linha);
-                break;
             }else{
                 continue;
             }
@@ -147,6 +153,7 @@ int main()
         case 3:
             if((tabuleiro[linha][coluna+1] != '*') && (coluna + 1 < 10)){
                 coluna += 1;
+                end = verifica(linha, coluna);
                 troca(coluna, linha );
             }else{
                 continue;
@@ -155,31 +162,30 @@ int main()
         default:
             if((tabuleiro[linha][coluna-1] != '*') && (coluna - 1 > -1)){
                 coluna -= 1;
+                end = verifica(linha, coluna);
                 troca(coluna, linha );
             }else{
                 continue;
             }
-            break;
         }
         exibir();
-      for(int i = 0; i<obs; i++){
-        if ((block[0][i] == linha) && (block[1][i] == coluna)){
-          end = 0;
-          printf("\nVoce bateu em um obstaculo\n\n");
-        }
-      }
         cont--;
     }
-  if (end == 0){
-    printf("parabens vc ganhou!!!");
-  }
+    if (end == 1){
+        printf("parabens vc ganhou!!!\n");
+    }else{
+        printf("vc bateu em um obstaculo\n");
+        cont++;
+    }
+    printf("Foram visitadas %d casas \nE não foram visitadas %d casas\n\n", ref-cont, (100 - (ref-cont)) - obs);
 
-  char continuar;
-  printf("Contirunar?: ");
-  scanf(" %c", &continuar);
-  if(continuar == 's'){
-    main();
-  }
-
-  return 0;
+    // Repete o jogo
+    char continuar;
+    printf("Contirunar?[S/N]: ");
+    scanf(" %c", &continuar);
+    continuar = tolower(continuar);
+    if((continuar == 's')){
+        main();
+    }
+    return 0;
 }
